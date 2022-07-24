@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Electrolize&family=Monda:wght@400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: #1b2a3c;
+    gap: 5rem;
+}
+
+button {
+    font-family: 'Monda', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    background-color: #f6f7f3;
+    border: none;
+    color: #7dabac;
+    border-radius: 999px;
+    padding: 0.5rem 1.75rem;
+    cursor: pointer;
+}
+
+h1 {
+    color: #f6f7f3;
+    font-family: 'Electrolize', sans-serif;
+    font-size: clamp(2rem, 1.0769rem + 4.1026vw, 6rem);
+}
+
+.paddle {
+    position: absolute;
+}
+
+.ball {
+    border-radius: 50%;
+    position: absolute;
+}
