@@ -1,11 +1,16 @@
 class Ball {
 
     #ballDiv = document.createElement("div");
-    #width = 20;
-    #height = 20;
-    #xPos = 300;
-    #yPos = 100;
-    #xVelocity = -10;
+    #radius = 10;
+    #width = this.#radius * 2;
+    #height = this.#radius * 2;
+
+    // Random starting xPosition
+    #xPos = this.#defineStartingX();
+    // Random starting yPosition
+    #yPos = this.#defineStartingY();
+
+    #xVelocity = (Math.random() < 0.5) ? -10 : 10;
     #yVelocity = -3;
     #bounces = 0;
 
@@ -20,11 +25,15 @@ class Ball {
         this.#ballDiv.classList.add("ball");
         this.#ballDiv.style.width = `${this.#width}px`;
         this.#ballDiv.style.height = `${this.#height}px`;
+
         this.#ballDiv.style.bottom = `${this.#yPos}px`;
         this.#ballDiv.style.left = `${this.#xPos}px`;
+
         this.#ballDiv.style.backgroundColor = this.color;
         document.body.appendChild(this.#ballDiv);
     }
+
+
 
     changeColor() {
 
@@ -85,4 +94,14 @@ class Ball {
         this.#ballDiv.style.bottom = `${this.#yPos}px`;
     }
 
+    #defineStartingX() {
+        // Random X between 0 and screen width
+        return Math.floor(Math.random() * (document.body.offsetWidth - this.#width + 1));
+    }
+
+    #defineStartingY() {
+        let screenHeight = document.body.offsetHeight - this.#height;
+        let upperHalfScreen = screenHeight / 2;
+        return Math.floor(Math.random() * (screenHeight - (upperHalfScreen) + 1)) + (upperHalfScreen);
+    }
 }

@@ -2,9 +2,9 @@ class Paddle {
 
     // Private fields, not accessible outside of class
     #paddleDiv = document.createElement("div");
-    #width = 100;
+    #width = 150;
     #height = 20;
-    #xPos = 0;
+    #xPos = (document.body.offsetWidth - this.#width) / 2;
     #yPos = 0;
     #velocity = 30;
 
@@ -21,6 +21,11 @@ class Paddle {
         this.#paddleDiv.style.left = `${this.#xPos}px`;
         this.#paddleDiv.style.backgroundColor = this.color;
         document.body.appendChild(this.#paddleDiv);
+    }
+
+    move(x, gameWindow) {
+        this.#xPos = (x >= (gameWindow.width - this.#width)) ? gameWindow.width - this.#width : x;
+        this.#updatePosition();
     }
 
     moveRight(gameWindow) {
