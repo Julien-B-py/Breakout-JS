@@ -10,14 +10,15 @@ class Ball {
     // Random starting yPosition
     #yPos = this.#defineStartingY();
 
-    #xVelocity = (Math.random() < 0.5) ? -10 : 10;
+    #xVelocity = (Math.random() < 0.5) ? -3 : 3;
     #yVelocity = -3;
     #bounces = 0;
 
-    constructor(color, sound, player) {
+    constructor(color, sound, player, bricks) {
         this.color = color;
         this.sound = sound;
         this.player = player;
+        this.bricks = bricks;
         this.init();
     }
 
@@ -41,6 +42,30 @@ class Ball {
 
     move(gameWindow) {
 
+        for (const brick of this.bricks) {
+
+            let brickRect = brick.rect;
+
+            // Handle lateral brick collisions
+            if (this.#yPos >= brickRect.y && this.#yPos <= (brickRect.y + brickRect.height) && (Math.abs(brickRect.x - this.#xPos) <= this.#width || Math.abs(brickRect.x + brickRect.width - this.#xPos) <= this.#width)) {
+                this.bounce("x", "hit");
+                brick.kill();
+                const index = this.bricks.indexOf(brick);
+                if (index > -1) this.bricks.splice(index, 1);
+                break;
+            }
+
+            // Handle bottom brick collisions
+            if (this.#xPos >= brickRect.x && this.#xPos <= (brickRect.x + brickRect.width) && (brickRect.y - this.#yPos) <= this.#height) {
+                this.bounce("y", "hit");
+                brick.kill();
+                const index = this.bricks.indexOf(brick);
+                if (index > -1) this.bricks.splice(index, 1);
+                break;
+            }
+
+
+        }
         if (this.collideWithPlayerH()) this.bounce("y", "player");
         if (this.collideWithHorizontalWall(gameWindow)) this.bounce("y", "wall");
         if (this.collideWithVerticalWall(gameWindow)) this.bounce("x", "wall");
@@ -100,7 +125,7 @@ class Ball {
     }
 
     #defineStartingY() {
-        let screenHeight = document.body.offsetHeight - this.#height;
+        let screenHeight = document.body.offsetHeight - this.#height - 60;
         let upperHalfScreen = screenHeight / 2;
         return Math.floor(Math.random() * (screenHeight - (upperHalfScreen) + 1)) + (upperHalfScreen);
     }

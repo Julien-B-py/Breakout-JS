@@ -28,9 +28,18 @@ startBtn.addEventListener("click", function () {
     buttonsDiv.remove();
 
     const player = new Paddle("#e34863");
+
+    let allBricks = [];
+    for (let i = 0; i < Brick.perRow; i++) {
+        for (let j = 0; j < Brick.rows; j++) {
+            const brick = new Brick(i, j);
+            allBricks.push(brick);
+        }
+    }
+
     const gameWindow = new Window();
     const sound = new Sound();
-    const ball = new Ball("#f6f7f3", sound, player);
+    const ball = new Ball("#f6f7f3", sound, player, allBricks);
 
     window.addEventListener("resize", function () {
         gameWindow.resize();
@@ -60,7 +69,7 @@ startBtn.addEventListener("click", function () {
 
 
 
-    setInterval(() => { ball.move(gameWindow) }, 16);
+    setInterval(() => { ball.move(gameWindow) }, 1);
 
 });
 

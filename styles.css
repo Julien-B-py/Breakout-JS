@@ -46,13 +46,17 @@ h1 {
     gap: 0.5rem;
 }
 
-.paddle {
+.paddle, .brick {
     position: absolute;
 }
 
 .ball {
     border-radius: 50%;
     position: absolute;
+}
+
+.brick {
+    border: 1px solid black;
 }
 
 
