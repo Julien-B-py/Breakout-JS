@@ -25,12 +25,14 @@ function hideMenu() {
 }
 
 function showMenu() {
-    document.querySelector("span").remove();
+
+    document.querySelectorAll("span").forEach(span => span.remove());
     document.querySelector(".paddle").remove();
     document.querySelector(".ball").remove();
     document.querySelectorAll(".brick").forEach(brick => brick.remove());
     document.body.appendChild(title);
     document.body.appendChild(buttonsDiv);
+    
 }
 
 let controlType = 0;
