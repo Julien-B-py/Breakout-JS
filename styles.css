@@ -40,6 +40,12 @@ h1 {
     font-size: clamp(2rem, 1.0769rem + 4.1026vw, 6rem);
 }
 
+span {
+    color: #f6f7f3;
+    font-family: 'Electrolize', sans-serif;
+    font-size: 2rem;
+}
+
 .main__menu {
     display: flex;
     flex-direction: column;

@@ -1,7 +1,6 @@
 const title = document.createElement("h1");
 title.textContent = "BREAKOUT.JS";
 document.body.appendChild(title);
-
 const buttonsDiv = document.createElement("div");
 buttonsDiv.classList.add("main__menu");
 const startBtn = document.createElement("button");
@@ -20,14 +19,28 @@ buttonsDiv.appendChild(startBtn);
 buttonsDiv.appendChild(optionBtn);
 document.body.appendChild(buttonsDiv);
 
+function hideMenu() {
+    title.remove();
+    buttonsDiv.remove();
+}
+
+function showMenu() {
+    document.querySelector("span").remove();
+    document.querySelector(".paddle").remove();
+    document.querySelector(".ball").remove();
+    document.querySelectorAll(".brick").forEach(brick => brick.remove());
+    document.body.appendChild(title);
+    document.body.appendChild(buttonsDiv);
+}
+
 let controlType = 0;
+let gameLoop;
 
 startBtn.addEventListener("click", function () {
 
-    title.remove();
-    buttonsDiv.remove();
+    hideMenu();
 
-    const player = new Paddle("#e34863");
+    const player = new Paddle();
 
     let allBricks = [];
     for (let i = 0; i < Brick.perRow; i++) {
@@ -39,7 +52,7 @@ startBtn.addEventListener("click", function () {
 
     const gameWindow = new Window();
     const sound = new Sound();
-    const ball = new Ball("#f6f7f3", sound, player, allBricks);
+    const ball = new Ball(sound, player, allBricks);
 
     window.addEventListener("resize", function () {
         gameWindow.resize();
@@ -69,7 +82,7 @@ startBtn.addEventListener("click", function () {
 
 
 
-    setInterval(() => { ball.move(gameWindow) }, 1);
+    gameLoop = setInterval(() => { ball.move(gameWindow) }, 1);
 
 });
 

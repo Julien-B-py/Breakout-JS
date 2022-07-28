@@ -1,6 +1,7 @@
 class Ball {
 
     #ballDiv = document.createElement("div");
+    #bouncesSpan = document.createElement("span");
     #radius = 10;
     #width = this.#radius * 2;
     #height = this.#radius * 2;
@@ -11,11 +12,12 @@ class Ball {
     #yPos = this.#defineStartingY();
 
     #xVelocity = (Math.random() < 0.5) ? - 3 : 3;
+    // #yVelocity = -10;
     #yVelocity = -10;
     #bounces = 0;
 
-    constructor(color, sound, player, bricks) {
-        this.color = color;
+    constructor(sound, player, bricks) {
+        this.color = "#f6f7f3";
         this.sound = sound;
         this.player = player;
         this.bricks = bricks;
@@ -31,7 +33,11 @@ class Ball {
         this.#ballDiv.style.left = `${this.#xPos}px`;
 
         this.#ballDiv.style.backgroundColor = this.color;
+
+        this.#bouncesSpan.textContent = this.#bounces;
+
         document.body.appendChild(this.#ballDiv);
+        document.body.appendChild(this.#bouncesSpan);
     }
 
 
@@ -66,21 +72,31 @@ class Ball {
 
 
         }
-        if (this.collideWithPlayerH()) this.bounce("y", "player");
+        if (this.collideWithPlayerH()) return this.bounce("y", "player");
+
         if (this.collideWithHorizontalWall(gameWindow)) this.bounce("y", "wall");
         if (this.collideWithVerticalWall(gameWindow)) this.bounce("x", "wall");
+
         this.#xPos += this.#xVelocity;
         this.#yPos += this.#yVelocity;
 
         this.#updatePosition();
 
-        if (this.#yPos + this.#height <= 0) alert("GAME OVER")
+        if (this.#yPos + this.#height <= 0) {
+            clearInterval(gameLoop);
+            showMenu();
+        }
 
     }
 
     bounce(axis, sound) {
 
         this.#bounces += 1;
+
+        if (this.#bounces % 10 === 0) this.#accelerate();
+
+        this.#bouncesSpan.textContent = this.#bounces;
+
         this.sound.play(sound);
 
         switch (axis) {
@@ -100,14 +116,22 @@ class Ball {
         const rect = this.player.rect;
         const { x, y, width, height } = rect;
 
-        if (Math.abs(this.#yPos - y) <= height && this.#xPos >= x && this.#xPos <= x + width) {
+        // If the bottom of the ball + his velocity is equal to paddle height, it means they are in horizontal contact
+        // If the center of the ball is between paddle.x and paddle.x + paddle.width, it means the ball is in the vertical range of the paddle
+        // If both conditions are met, we can tell ball is touching the paddle
+        if (this.#yPos + this.#yVelocity <= height && this.center.x >= x && this.center.x <= x + width) {
+            // We adjust ball position to make it touch the paddle in Y axis
+            this.#yPos = height;
+            this.#updatePosition();
 
+            // We check which section of the paddle has been touched by the ball to reflect accordingly
             for (const item of Object.entries(this.player.sectionsPos)) {
                 const range = item[1];
                 if (this.center.x >= range[0] && this.center.x <= range[1]) this.#xVelocity = range[2];
             }
 
             return true;
+
         }
 
     }
@@ -143,6 +167,11 @@ class Ball {
             x: this.#xPos + (this.#width / 2),
             y: this.#yPos + (this.#height / 2)
         };
+    }
+
+    #accelerate() {
+        this.#yVelocity *= 1.1;
+        this.#yVelocity = Math.round(this.#yVelocity);
     }
 
 }

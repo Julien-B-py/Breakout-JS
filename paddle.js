@@ -8,8 +8,8 @@ class Paddle {
     #yPos = 0;
     #velocity = 30;
 
-    constructor(color) {
-        this.color = color;
+    constructor() {
+        this.color = "#e34863";
         this.init();
     }
 
