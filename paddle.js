@@ -46,6 +46,26 @@ class Paddle {
         this.#updatePosition();
     }
 
+    get center() {
+        return {
+            x: this.#xPos + (this.#width / 2),
+            y: this.#yPos + (this.#height / 2)
+        };
+    }
+
+    // Get paddle sections for variable ball bounce
+    get sectionsPos() {
+        return {
+            1: [this.#xPos, this.#width / 7 + this.#xPos, -9],
+            2: [this.#width / 7 + this.#xPos, 2 * this.#width / 7 + this.#xPos, -6],
+            3: [2 * this.#width / 7 + this.#xPos, 3 * this.#width / 7 + this.#xPos, -3],
+            4: [3 * this.#width / 7 + this.#xPos, 4 * this.#width / 7 + this.#xPos, 0],
+            5: [4 * this.#width / 7 + this.#xPos, 5 * this.#width / 7 + this.#xPos, 3],
+            6: [5 * this.#width / 7 + this.#xPos, 6 * this.#width / 7 + this.#xPos, 6],
+            7: [6 * this.#width / 7 + this.#xPos, this.#width + this.#xPos, 9],
+        }
+    }
+
     get rect() {
         return {
             x: this.#xPos,

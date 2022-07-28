@@ -10,8 +10,8 @@ class Ball {
     // Random starting yPosition
     #yPos = this.#defineStartingY();
 
-    #xVelocity = (Math.random() < 0.5) ? -3 : 3;
-    #yVelocity = -3;
+    #xVelocity = (Math.random() < 0.5) ? - 3 : 3;
+    #yVelocity = -10;
     #bounces = 0;
 
     constructor(color, sound, player, bricks) {
@@ -100,7 +100,15 @@ class Ball {
         const rect = this.player.rect;
         const { x, y, width, height } = rect;
 
-        if (Math.abs(this.#yPos - y) <= height && this.#xPos >= x && this.#xPos <= x + width) return true;
+        if (Math.abs(this.#yPos - y) <= height && this.#xPos >= x && this.#xPos <= x + width) {
+
+            for (const item of Object.entries(this.player.sectionsPos)) {
+                const range = item[1];
+                if (this.center.x >= range[0] && this.center.x <= range[1]) this.#xVelocity = range[2];
+            }
+
+            return true;
+        }
 
     }
 
@@ -129,4 +137,12 @@ class Ball {
         let upperHalfScreen = screenHeight / 2;
         return Math.floor(Math.random() * (screenHeight - (upperHalfScreen) + 1)) + (upperHalfScreen);
     }
+
+    get center() {
+        return {
+            x: this.#xPos + (this.#width / 2),
+            y: this.#yPos + (this.#height / 2)
+        };
+    }
+
 }

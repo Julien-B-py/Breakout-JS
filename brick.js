@@ -7,13 +7,14 @@ class Brick {
     #xPos;
     #yPos;
 
+    static colors = ["#97bcbd", "#7dabac", "#64898a"];
     static perRow = 10;
     static rows = 3;
 
     constructor(index, row) {
         this.row = row + 1;
         this.index = index;
-        this.color = Math.floor(Math.random() * 16777215).toString(16);
+        this.color = Brick.colors[Math.floor(Math.random() * Brick.colors.length)]
         this.setPosition();
         this.init();
     }
@@ -24,7 +25,7 @@ class Brick {
         this.#brickDiv.style.height = `${this.#height}px`;
         this.#brickDiv.style.bottom = `${this.#yPos}px`;
         this.#brickDiv.style.left = `${this.#xPos}px`;
-        this.#brickDiv.style.backgroundColor = `#${this.color}`;
+        this.#brickDiv.style.backgroundColor = this.color;
         document.body.appendChild(this.#brickDiv);
     }
 
