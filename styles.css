@@ -67,7 +67,6 @@ span {
 
 
 .modal {
-    display: none;
     position: fixed;
     z-index: 1;
     padding-top: 100px;
@@ -80,7 +79,7 @@ span {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.modal .modal-content {
+.modal .modal__options {
     background-color: rgb(18, 18, 18);
     margin: auto;
     padding: 2rem;
@@ -89,12 +88,17 @@ span {
     color: #fff;
 }
 
-.modal .modal-content h2 {
+.modal .modal__options h2 {
     font-weight: 500;
     font-size: 1.25rem;
     margin-bottom: 1rem;
 }
 
-.modal .modal-content select {
+.modal .modal__options .modal__options__option {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal .modal__options .modal__options__option select {
     font-family: 'Roboto', sans-serif;
 }

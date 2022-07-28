@@ -1,22 +1,22 @@
 class Ball {
 
+    // Private fields, not accessible outside of class
     #ballDiv = document.createElement("div");
     #bouncesSpan = document.createElement("span");
     #radius = 10;
     #width = this.#radius * 2;
     #height = this.#radius * 2;
-
     // Random starting xPosition
     #xPos = this.#defineStartingX();
     // Random starting yPosition
     #yPos = this.#defineStartingY();
-
-    #xVelocity = (Math.random() < 0.5) ? - 3 : 3;
-    // #yVelocity = -10;
+    #xVelocity = Math.random() < 0.5 ? - 3 : 3;
     #yVelocity = -10;
     #bounces = 0;
 
+    // Called by new operator
     constructor(sound, player, bricks) {
+        // Instance properties
         this.color = "#f6f7f3";
         this.sound = sound;
         this.player = player;
@@ -24,6 +24,7 @@ class Ball {
         this.init();
     }
 
+    // Public methods
     init() {
         this.#ballDiv.classList.add("ball");
         this.#ballDiv.style.width = `${this.#width}px`;
@@ -38,12 +39,6 @@ class Ball {
 
         document.body.appendChild(this.#ballDiv);
         document.body.appendChild(this.#bouncesSpan);
-    }
-
-
-
-    changeColor() {
-
     }
 
     move(gameWindow) {
@@ -145,7 +140,7 @@ class Ball {
         // if (this.#yPos <= 0 || this.#yPos + this.#height + this.#yVelocity > gameWindow.height) return true;
     }
 
-    // Private method
+    // Private methods
     #updatePosition() {
         this.#ballDiv.style.left = `${this.#xPos}px`;
         this.#ballDiv.style.bottom = `${this.#yPos}px`;
@@ -162,16 +157,17 @@ class Ball {
         return Math.floor(Math.random() * (screenHeight - (upperHalfScreen) + 1)) + (upperHalfScreen);
     }
 
+    #accelerate() {
+        this.#yVelocity *= 1.1;
+        this.#yVelocity = Math.round(this.#yVelocity);
+    }
+
+    // Getter methods
     get center() {
         return {
             x: this.#xPos + (this.#width / 2),
             y: this.#yPos + (this.#height / 2)
         };
-    }
-
-    #accelerate() {
-        this.#yVelocity *= 1.1;
-        this.#yVelocity = Math.round(this.#yVelocity);
     }
 
 }

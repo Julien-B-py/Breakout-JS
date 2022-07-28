@@ -6,12 +6,14 @@ class Brick {
     #height = 20;
     #xPos;
     #yPos;
-
+    // Static fields, available only on class
     static colors = ["#97bcbd", "#7dabac", "#64898a"];
     static perRow = 10;
     static rows = 3;
 
+    // Called by new operator
     constructor(index, row) {
+        // Instance properties
         this.row = row + 1;
         this.index = index;
         this.color = Brick.colors[Math.floor(Math.random() * Brick.colors.length)]
@@ -19,6 +21,7 @@ class Brick {
         this.init();
     }
 
+    // Public methods
     init() {
         this.#brickDiv.classList.add("brick");
         this.#brickDiv.style.width = `${this.#width}px`;
@@ -30,10 +33,8 @@ class Brick {
     }
 
     setPosition() {
-
         this.#xPos = this.#width * this.index;
         this.#yPos = document.body.offsetHeight - this.#height * this.row;
-
     }
 
     kill() {
@@ -41,7 +42,7 @@ class Brick {
     }
 
 
-
+    // Getter methods
     get rect() {
         return {
             x: this.#xPos,

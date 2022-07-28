@@ -32,11 +32,11 @@ function showMenu() {
     document.querySelectorAll(".brick").forEach(brick => brick.remove());
     document.body.appendChild(title);
     document.body.appendChild(buttonsDiv);
-    
+
 }
 
-let controlType = 0;
 let gameLoop;
+let options;
 
 startBtn.addEventListener("click", function () {
 
@@ -61,7 +61,7 @@ startBtn.addEventListener("click", function () {
     });
 
 
-    switch (controlType) {
+    switch (Options.controlType) {
         case 0:
             document.addEventListener('mousemove', function (e) {
 
@@ -82,31 +82,16 @@ startBtn.addEventListener("click", function () {
 
 
 
+    setTimeout(function () {
+        gameLoop = setInterval(() => { ball.move(gameWindow) }, 16);
+    }, 1000);
 
-
-    gameLoop = setInterval(() => { ball.move(gameWindow) }, 1);
 
 });
 
-// Get the modal
-const modal = document.querySelector(".modal");
-const controlsSelect = document.querySelector("select");
-controlsSelect.selectedIndex = controlType;
 
-controlsSelect.addEventListener("input", function () {
-    controlType = Number(this.value);
-})
 
 optionBtn.addEventListener("click", function () {
-    modal.style.display = "block";
+    options = new Options();
 })
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-
-
 

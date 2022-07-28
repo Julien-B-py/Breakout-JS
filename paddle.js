@@ -8,11 +8,14 @@ class Paddle {
     #yPos = 0;
     #velocity = 30;
 
+    // Called by new operator
     constructor() {
+        // Instance properties
         this.color = "#e34863";
         this.init();
     }
 
+    // Public methods
     init() {
         this.#paddleDiv.classList.add("paddle");
         this.#paddleDiv.style.width = `${this.#width}px`;
@@ -46,6 +49,7 @@ class Paddle {
         this.#updatePosition();
     }
 
+    // Getter methods
     get center() {
         return {
             x: this.#xPos + (this.#width / 2),
@@ -75,7 +79,7 @@ class Paddle {
         };
     }
 
-    // Private method
+    // Private methods
     #updatePosition() {
         this.#paddleDiv.style.left = `${this.#xPos}px`;
     }
