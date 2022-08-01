@@ -8,9 +8,12 @@ class Ball {
     #height = this.#radius * 2;
     // Random starting xPosition
     #xPos = this.#defineStartingX();
+    // #xPos = 192;
     // Random starting yPosition
     #yPos = this.#defineStartingY();
+    // #yPos = 100;
     #xVelocity = Math.random() < 0.5 ? - 3 : 3;
+    // #xVelocity = 0;
     #yVelocity = -10;
     #bounces = 0;
 
@@ -47,30 +50,41 @@ class Ball {
 
             let brickRect = brick.rect;
 
-            // Handle lateral brick collisions
-            if (this.#yPos >= brickRect.y && this.#yPos <= (brickRect.y + brickRect.height) && (Math.abs(brickRect.x - this.#xPos) <= this.#width || Math.abs(brickRect.x + brickRect.width - this.#xPos) <= this.#width)) {
-                this.bounce("x", "hit");
-                brick.kill();
-                const index = this.bricks.indexOf(brick);
-                if (index > -1) this.bricks.splice(index, 1);
-                break;
-            }
 
+            // // Handle lateral brick collisions
+            // if (this.#yPos >= brickRect.y && this.#yPos <= (brickRect.y + brickRect.height) && (Math.abs(brickRect.x - this.#xPos) <= this.#width || Math.abs(brickRect.x + brickRect.width - this.#xPos) <= this.#width)) {
+            //     this.bounce("x", "hit");
+            //     brick.kill();
+            //     const index = this.bricks.indexOf(brick);
+            //     if (index > -1) this.bricks.splice(index, 1);
+            //     break;
+            // }
+
+
+            // WORKING
             // Handle bottom brick collisions
-            if (this.#xPos >= brickRect.x && this.#xPos <= (brickRect.x + brickRect.width) && (brickRect.y - this.#yPos) <= this.#height) {
+            // If ball x position is between brick horizontal limits and is hitting the bottom of the brick
+            if (((this.#xPos + this.#width + this.#xVelocity) >= brickRect.x)
+                && ((this.#xPos + this.#xVelocity) <= (brickRect.x + brickRect.width))
+                && ((this.#yPos + this.#height + this.#yVelocity - brickRect.y) >= 0)) {
+                // console.log(brick)
+                // alert(111);
+
                 this.bounce("y", "hit");
                 brick.kill();
                 const index = this.bricks.indexOf(brick);
                 if (index > -1) this.bricks.splice(index, 1);
-                break;
             }
 
-
         }
+
+
+
         if (this.collideWithPlayerH()) return this.bounce("y", "player");
 
-        if (this.collideWithHorizontalWall(gameWindow)) this.bounce("y", "wall");
-        if (this.collideWithVerticalWall(gameWindow)) this.bounce("x", "wall");
+        if (this.collideWithHorizontalWall(gameWindow)) return this.bounce("y", "wall");
+
+        if (this.collideWithVerticalWall(gameWindow)) return this.bounce("x", "wall");
 
         this.#xPos += this.#xVelocity;
         this.#yPos += this.#yVelocity;
@@ -132,12 +146,32 @@ class Ball {
     }
 
     collideWithVerticalWall(gameWindow) {
-        if (this.#xPos <= 0 || this.#xPos + this.#width + this.#xVelocity > gameWindow.width) return true;
+
+        if (this.#xPos + this.#xVelocity <= 0) {
+            this.#xPos = 0;
+            this.#updatePosition();
+            // alert(this.#xPos)
+            return true;
+        }
+
+        if (this.#xPos + this.#width + this.#xVelocity >= gameWindow.width) {
+            this.#xPos = gameWindow.width - this.#width;
+            // // alert(this.#xPos)
+            this.#updatePosition();
+            return true;
+        }
+
     }
 
+
     collideWithHorizontalWall(gameWindow) {
-        if (this.#yPos + this.#height + this.#yVelocity > gameWindow.height) return true;
-        // if (this.#yPos <= 0 || this.#yPos + this.#height + this.#yVelocity > gameWindow.height) return true;
+
+        if (this.#yPos + this.#height + this.#yVelocity >= gameWindow.height) {
+            this.#yPos = gameWindow.height - this.#height;
+            this.#updatePosition();
+            return true;
+        }
+
     }
 
     // Private methods
@@ -159,7 +193,9 @@ class Ball {
 
     #accelerate() {
         this.#yVelocity *= 1.1;
+        this.#xVelocity *= 1.1;
         this.#yVelocity = Math.round(this.#yVelocity);
+        this.#xVelocity = Math.round(this.#xVelocity);
     }
 
     // Getter methods

@@ -38,6 +38,9 @@ function showMenu() {
 let gameLoop;
 let options;
 
+let moveLeftRequest = false;
+let moveRightRequest = false;
+
 startBtn.addEventListener("click", function () {
 
     hideMenu();
@@ -71,12 +74,28 @@ startBtn.addEventListener("click", function () {
             });
             break;
         case 1:
+
             document.addEventListener("keydown", function (e) {
 
-                if (e.which === 81) return player.moveLeft();
-                if (e.which === 68) return player.moveRight(gameWindow);
+                if (e.which === 81) {
+                    moveLeftRequest = true;
+                    moveRightRequest = false;
+                    return;
+                }
+
+                if (e.which === 68) {
+                    moveRightRequest = true;
+                    moveLeftRequest = false;
+                    return;
+                }
 
             });
+
+            document.addEventListener("keyup", function (e) {
+                if (e.which === 81) return moveLeftRequest = false;
+                if (e.which === 68) return moveRightRequest = false;;
+            })
+
             break;
     }
 
@@ -86,6 +105,10 @@ startBtn.addEventListener("click", function () {
         gameLoop = setInterval(() => { ball.move(gameWindow) }, 16);
     }, 1000);
 
+    playerLoop = setInterval(() => {
+        if (moveLeftRequest) return player.moveLeft();
+        if (moveRightRequest) player.moveRight(gameWindow);
+    }, 16);
 
 });
 
