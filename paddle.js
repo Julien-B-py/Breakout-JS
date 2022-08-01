@@ -6,7 +6,7 @@ class Paddle {
     #height = 20;
     #xPos = (document.body.offsetWidth - this.#width) / 2;
     #yPos = 0;
-    #velocity = 30;
+    #velocity = 15;
 
     // Called by new operator
     constructor() {
@@ -26,25 +26,28 @@ class Paddle {
         document.body.appendChild(this.#paddleDiv);
     }
 
+    // Move (mouse)
     move(x, gameWindow) {
         this.#xPos = (x >= (gameWindow.width - this.#width)) ? gameWindow.width - this.#width : x;
         this.#updatePosition();
     }
 
+    // Move right (keyboard)
     moveRight(gameWindow) {
-        if (this.#xPos + this.#width + this.#velocity > gameWindow.width) {
+        if (this.#xPos + this.#width + this.#velocity * Options.keyboardSensitivity > gameWindow.width) {
             this.#xPos = gameWindow.width - this.#width;
         } else {
-            this.#xPos += this.#velocity;
+            this.#xPos += this.#velocity * Options.keyboardSensitivity;
         }
         this.#updatePosition();
     }
 
+    // Move left (keyboard)
     moveLeft() {
-        if (this.#xPos < this.#velocity) {
+        if (this.#xPos < this.#velocity * Options.keyboardSensitivity) {
             this.#xPos = 0;
         } else {
-            this.#xPos -= this.#velocity;
+            this.#xPos -= this.#velocity * Options.keyboardSensitivity;
         }
         this.#updatePosition();
     }

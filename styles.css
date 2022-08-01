@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Electrolize&family=Monda:wght@400;700&family=Roboto:wght@400;500&display=swap');
 
+:root {
+    --clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -32,12 +36,38 @@ button {
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
+    transform: scale(0);
+    transition: all 0.3s;
+}
+
+button.visible {
+    transform: scale(1);
 }
 
 h1 {
+    display: flex;
+}
+
+h1 span {
     color: #f6f7f3;
     font-family: 'Electrolize', sans-serif;
     font-size: clamp(2rem, 1.0769rem + 4.1026vw, 6rem);
+    opacity: 0;
+    transform: translateY(-50px);
+    transition: all 0.3s;
+}
+
+h1 span.visible {
+    opacity: 1;
+    transform: translateY(0px);
+}
+
+h1 span::before {
+    content: attr(data-text);
+    color: #7dabac;
+    position: absolute;
+    clip-path: var(--clip-path);
+    transition: all 1s;
 }
 
 span {
@@ -86,12 +116,15 @@ span {
     border: 2px solid rgb(0, 0, 0);
     width: 400px;
     color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .modal .modal__options h2 {
     font-weight: 500;
     font-size: 1.25rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .modal .modal__options .modal__options__option {

@@ -1,5 +1,10 @@
 const title = document.createElement("h1");
-title.textContent = "BREAKOUT.JS";
+const titleText = "BREAKOUT.JS";
+const titleTextArray = titleText.split('');
+const lastTitleLetterIndex = titleTextArray.length - 1;
+
+let transitionCount = 0;
+
 document.body.appendChild(title);
 const buttonsDiv = document.createElement("div");
 buttonsDiv.classList.add("main__menu");
@@ -18,6 +23,55 @@ optionBtn.appendChild(optionBtnIcon);
 buttonsDiv.appendChild(startBtn);
 buttonsDiv.appendChild(optionBtn);
 document.body.appendChild(buttonsDiv);
+
+const slideIn = (element, elementIndex) => {
+
+    setTimeout(() => {
+        element.classList.add("visible");
+    }, 75 * elementIndex);
+
+}
+
+const rollDown = () => {
+
+    let letters = document.querySelectorAll("h1 span");
+    setTimeout(() => {
+        letters.forEach(letter => letter.style.setProperty('--clip-path', "polygon(0 100%, 100% 100%, 100% 100%, 0% 100%)"));
+    }, 150);
+
+}
+
+const scaleIn = () => {
+
+    let buttons = document.querySelectorAll("button");
+    buttons.forEach((button, index) =>
+        setTimeout(() => {
+            button.classList.add("visible");
+        }, 75 * index));
+
+}
+
+titleTextArray.forEach((letter, index) => {
+
+    const letterSpan = document.createElement("span");
+    letterSpan.textContent = letter;
+    letterSpan.dataset.text = letter;
+    title.appendChild(letterSpan);
+
+    letterSpan.ontransitionend = () => {
+
+        transitionCount++;
+
+        if (transitionCount === titleTextArray.length * 2) rollDown();
+
+        if (transitionCount === titleTextArray.length * 3) scaleIn();
+
+    }
+
+    slideIn(letterSpan, index);
+
+})
+
 
 function hideMenu() {
     title.remove();
@@ -41,21 +95,18 @@ let options;
 let moveLeftRequest = false;
 let moveRightRequest = false;
 
+let player;
+let gameWindow;
+
 startBtn.addEventListener("click", function () {
 
     hideMenu();
 
-    const player = new Paddle();
+    player = new Paddle();
 
-    let allBricks = [];
-    for (let i = 0; i < Brick.perRow; i++) {
-        for (let j = 0; j < Brick.rows; j++) {
-            const brick = new Brick(i, j);
-            allBricks.push(brick);
-        }
-    }
+    let allBricks = generateBricks();
 
-    const gameWindow = new Window();
+    gameWindow = new Window();
     const sound = new Sound();
     const ball = new Ball(sound, player, allBricks);
 
@@ -66,53 +117,68 @@ startBtn.addEventListener("click", function () {
 
     switch (Options.controlType) {
         case 0:
-            document.addEventListener('mousemove', function (e) {
-
-                let mouseX = e.pageX;
-                player.move(mouseX, gameWindow);
-
-            });
+            document.removeEventListener("keydown", handleKeyPress);
+            document.removeEventListener("keyup", handleKeyRelease);
+            document.addEventListener('mousemove', handleMouseMove);
             break;
         case 1:
-
-            document.addEventListener("keydown", function (e) {
-
-                if (e.which === 81) {
-                    moveLeftRequest = true;
-                    moveRightRequest = false;
-                    return;
-                }
-
-                if (e.which === 68) {
-                    moveRightRequest = true;
-                    moveLeftRequest = false;
-                    return;
-                }
-
-            });
-
-            document.addEventListener("keyup", function (e) {
-                if (e.which === 81) return moveLeftRequest = false;
-                if (e.which === 68) return moveRightRequest = false;;
-            })
-
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.addEventListener("keydown", handleKeyPress);
+            document.addEventListener("keyup", handleKeyRelease);
             break;
     }
 
 
 
-    setTimeout(function () {
+    setTimeout(() => {
         gameLoop = setInterval(() => { ball.move(gameWindow) }, 16);
     }, 1000);
 
     playerLoop = setInterval(() => {
         if (moveLeftRequest) return player.moveLeft();
         if (moveRightRequest) player.moveRight(gameWindow);
-    }, 16);
+    }, 1);
 
 });
 
+function handleKeyPress(e) {
 
+    if (e.which === 81) {
+        moveLeftRequest = true;
+        moveRightRequest = false;
+        return;
+    }
+
+    if (e.which === 68) {
+        moveRightRequest = true;
+        moveLeftRequest = false;
+        return;
+    }
+
+}
+
+function handleKeyRelease(e) {
+
+    if (e.which === 81) return moveLeftRequest = false;
+    if (e.which === 68) return moveRightRequest = false;
+
+}
+
+function handleMouseMove(event) {
+    let mouseX = event.pageX;
+    player.move(mouseX, gameWindow);
+}
+
+function generateBricks() {
+    let bricks = [];
+    for (let i = 0; i < Brick.perRow; i++) {
+        for (let j = 0; j < Brick.rows; j++) {
+            const brick = new Brick(i, j);
+            bricks.push(brick);
+        }
+    }
+    return bricks;
+}
 
 optionBtn.addEventListener("click", function () {
     options = new Options();
