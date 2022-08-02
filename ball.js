@@ -12,9 +12,10 @@ class Ball {
     // Random starting yPosition
     #yPos = this.#defineStartingY();
     // #yPos = 100;
-    #xVelocity = Math.random() < 0.5 ? - 3 : 3;
+    #xVelocity = (Math.random() < 0.5 ? - 0.3 : 0.3) * this.#defineNavSpeedMultiplier();
     // #xVelocity = 0;
-    #yVelocity = -10;
+    #yVelocity = 1 * this.#defineNavSpeedMultiplier();
+    #acceleration = 1;
     #bounces = 0;
 
     // Called by new operator
@@ -45,6 +46,8 @@ class Ball {
     }
 
     move(gameWindow) {
+
+        // console.log(this.#xVelocity, this.#yVelocity);
 
         for (const brick of this.bricks) {
 
@@ -136,7 +139,7 @@ class Ball {
             // We check which section of the paddle has been touched by the ball to reflect accordingly
             for (const item of Object.entries(this.player.sectionsPos)) {
                 const range = item[1];
-                if (this.center.x >= range[0] && this.center.x <= range[1]) this.#xVelocity = range[2];
+                if (this.center.x >= range[0] && this.center.x <= range[1]) this.#xVelocity = range[2] * this.#acceleration;
             }
 
             return true;
@@ -192,10 +195,21 @@ class Ball {
     }
 
     #accelerate() {
+        this.#acceleration *= 1.1;
         this.#yVelocity *= 1.1;
         this.#xVelocity *= 1.1;
-        this.#yVelocity = Math.round(this.#yVelocity);
-        this.#xVelocity = Math.round(this.#xVelocity);
+    }
+
+    #defineNavSpeedMultiplier() {
+        let userAgent = navigator.userAgent;
+        // Chrome
+        if (userAgent.match(/chrome|chromium|crios/i)) {
+            return 2;
+        }
+        // Firefox
+        if (userAgent.match(/firefox|fxios/i)) {
+            return 10;
+        }
     }
 
     // Getter methods

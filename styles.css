@@ -37,7 +37,7 @@ button {
     align-items: center;
     gap: 0.5rem;
     transform: scale(0);
-    transition: all 0.3s;
+    transition: all 0.3s ease-out;
 }
 
 button.visible {
@@ -54,7 +54,7 @@ h1 span {
     font-size: clamp(2rem, 1.0769rem + 4.1026vw, 6rem);
     opacity: 0;
     transform: translateY(-50px);
-    transition: all 0.3s;
+    transition: all 0.3s ease-out;
 }
 
 h1 span.visible {
@@ -67,7 +67,7 @@ h1 span::before {
     color: #7dabac;
     position: absolute;
     clip-path: var(--clip-path);
-    transition: all 1s;
+    transition: all 1s ease-out;
 }
 
 span {

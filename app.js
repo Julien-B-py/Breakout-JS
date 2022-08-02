@@ -98,6 +98,8 @@ let moveRightRequest = false;
 let player;
 let gameWindow;
 
+
+
 startBtn.addEventListener("click", function () {
 
     hideMenu();
@@ -131,13 +133,15 @@ startBtn.addEventListener("click", function () {
 
 
     setTimeout(() => {
-        gameLoop = setInterval(() => { ball.move(gameWindow) }, 16);
-    }, 1000);
 
-    playerLoop = setInterval(() => {
-        if (moveLeftRequest) return player.moveLeft();
-        if (moveRightRequest) player.moveRight(gameWindow);
-    }, 1);
+        gameLoop = setInterval(() => {
+            if (!allBricks.length) alert("YOU WIN");
+            if (moveLeftRequest) player.moveLeft();
+            if (moveRightRequest) player.moveRight(gameWindow);
+            ball.move(gameWindow);
+        }, 1);
+
+    }, 1000);
 
 });
 
