@@ -1,7 +1,6 @@
 const title = document.createElement("h1");
 const titleText = "BREAKOUT.JS";
-const titleTextArray = titleText.split('');
-const lastTitleLetterIndex = titleTextArray.length - 1;
+const titleTextArray = [...titleText];
 
 let transitionCount = 0;
 
@@ -24,31 +23,30 @@ buttonsDiv.appendChild(startBtn);
 buttonsDiv.appendChild(optionBtn);
 document.body.appendChild(buttonsDiv);
 
-const slideIn = (element, elementIndex) => {
-
+const slideInLetter = (letterSpan, index) => {
     setTimeout(() => {
-        element.classList.add("visible");
-    }, 75 * elementIndex);
+        letterSpan.classList.add("visible");
+    }, 75 * index);
+};
 
-}
-
-const rollDown = () => {
-
+const rollDownLetters = () => {
     let letters = document.querySelectorAll("h1 span");
     setTimeout(() => {
-        letters.forEach(letter => letter.style.setProperty('--clip-path', "polygon(0 100%, 100% 100%, 100% 100%, 0% 100%)"));
+        letters.forEach((letter) => {
+            letter.style.setProperty(
+                "--clip-path",
+                `polygon(0 100%, 100% 100%, 100% 100%, 0% 100%)`
+            );
+        });
     }, 150);
+};
 
-}
-
-const scaleIn = () => {
-
+const scaleInButtons = () => {
     let buttons = document.querySelectorAll("button");
     buttons.forEach((button, index) =>
         setTimeout(() => {
             button.classList.add("visible");
         }, 75 * index));
-
 }
 
 titleTextArray.forEach((letter, index) => {
@@ -62,13 +60,13 @@ titleTextArray.forEach((letter, index) => {
 
         transitionCount++;
 
-        if (transitionCount === titleTextArray.length * 2) rollDown();
+        if (transitionCount === titleTextArray.length * 2) rollDownLetters();
 
-        if (transitionCount === titleTextArray.length * 3) scaleIn();
+        if (transitionCount === titleTextArray.length * 3) scaleInButtons();
 
     }
 
-    slideIn(letterSpan, index);
+    slideInLetter(letterSpan, index);
 
 })
 
@@ -90,15 +88,9 @@ function showMenu() {
 }
 
 let gameLoop;
-let options;
-
-let moveLeftRequest = false;
-let moveRightRequest = false;
 
 let player;
 let gameWindow;
-
-
 
 startBtn.addEventListener("click", function () {
 
@@ -145,36 +137,41 @@ startBtn.addEventListener("click", function () {
 
 });
 
-function handleKeyPress(e) {
+const moveLeftKeyCode = 81;
+const moveRightKeyCode = 68;
 
-    if (e.which === 81) {
+let moveLeftRequest = false;
+let moveRightRequest = false;
+
+let options;
+
+function handleKeyPress(e) {
+    const keyCode = e.which;
+    if (keyCode === moveLeftKeyCode) {
         moveLeftRequest = true;
         moveRightRequest = false;
         return;
     }
-
-    if (e.which === 68) {
+    if (keyCode === moveRightKeyCode) {
         moveRightRequest = true;
         moveLeftRequest = false;
         return;
     }
-
 }
 
 function handleKeyRelease(e) {
-
-    if (e.which === 81) return moveLeftRequest = false;
-    if (e.which === 68) return moveRightRequest = false;
-
+    const keyCode = e.which;
+    if (keyCode === moveLeftKeyCode) return moveLeftRequest = false;
+    if (keyCode === moveRightKeyCode) return moveRightRequest = false;
 }
 
-function handleMouseMove(event) {
-    let mouseX = event.pageX;
+function handleMouseMove(e) {
+    const mouseX = e.pageX;
     player.move(mouseX, gameWindow);
 }
 
 function generateBricks() {
-    let bricks = [];
+    const bricks = [];
     for (let i = 0; i < Brick.perRow; i++) {
         for (let j = 0; j < Brick.rows; j++) {
             const brick = new Brick(i, j);

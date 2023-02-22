@@ -1,13 +1,13 @@
 class Window {
 
     // Private fields, not accessible outside of class
-    #width = document.body.offsetWidth;
-    #height = document.body.offsetHeight;
+    #width = window.innerWidth;
+    #height = window.innerHeight;
 
     // Public methods
     resize() {
-        this.#width = document.body.offsetWidth;
-        this.#height = document.body.offsetHeight;
+        this.#width = window.innerWidth;
+        this.#height = window.innerHeight;
     }
 
     // Getter methods
